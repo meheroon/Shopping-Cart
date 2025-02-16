@@ -221,4 +221,37 @@
       z-index: 100;
     }
   }
+
+  /* Promo Code Section */
+#promo-code-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#promo-code {
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+#promo-message {
+  font-size: 16px;
+  color: green;
+}
+
+#apply-promo-code {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+}
+
+#apply-promo-code:hover {
+  background-color: #0056b3;
+}
+
   

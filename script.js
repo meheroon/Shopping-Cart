@@ -1,7 +1,9 @@
 let products = [];
 let cart = [];
+let promoApplied = false;
+let discountAmount = 0;
+let promoCode = '';
 
-// Fetch product data (can use API or a local JSON file)
 fetch('products.json')
   .then(response => response.json())
   .then(data => {
@@ -66,7 +68,14 @@ function updateCart() {
     cartCount += item.quantity;
   });
 
-  totalPriceElement.innerText = `Total: $${totalPrice.toFixed(2)}`;
+  // Apply discount if promo code is applied
+  if (promoApplied) {
+    totalPrice -= discountAmount;
+    totalPriceElement.innerText = `Total: $${totalPrice.toFixed(2)} (Discount Applied)`;
+  } else {
+    totalPriceElement.innerText = `Total: $${totalPrice.toFixed(2)}`;
+  }
+  
   cartCountElement.innerText = `Items in Cart: ${cartCount}`;
 }
 
@@ -91,6 +100,8 @@ function updateQuantity(productId, delta) {
 
 document.getElementById('clear-cart').addEventListener('click', () => {
   cart = [];
+  promoApplied = false;
+  discountAmount = 0;
   updateCart();
 });
 
@@ -102,3 +113,39 @@ document.getElementById('checkout').addEventListener('click', () => {
     alert('Cart is empty');
   }
 });
+
+// Promo Code logic
+document.getElementById('apply-promo-code').addEventListener('click', () => {
+  const promoCodeInput = document.getElementById('promo-code').value.trim().toLowerCase();
+  const promoMessageElement = document.getElementById('promo-message');
+
+  // Reset message
+  promoMessageElement.innerText = '';
+
+  // Check if promo code is valid
+  if (promoCodeInput === 'ostad10' && !promoApplied) {
+    promoCode = 'ostad10';
+    discountAmount = calculateDiscount(0.10);
+    promoApplied = true;
+    promoMessageElement.innerText = 'Promo code applied: 10% off!';
+  } else if (promoCodeInput === 'ostad5' && !promoApplied) {
+    promoCode = 'ostad5';
+    discountAmount = calculateDiscount(0.05);
+    promoApplied = true;
+    promoMessageElement.innerText = 'Promo code applied: 5% off!';
+  } else if (promoCodeInput === '' || promoApplied) {
+    promoMessageElement.innerText = 'Invalid or already used promo code.';
+  } else {
+    promoMessageElement.innerText = 'Invalid promo code.';
+  }
+
+  updateCart();
+});
+
+function calculateDiscount(percent) {
+  let totalPrice = 0;
+  cart.forEach(item => {
+    totalPrice += item.product.price * item.quantity;
+  });
+  return totalPrice * percent;
+}

@@ -4,21 +4,21 @@
       "name": "Product 1",
       "description": "Description of Product 1",
       "price": 19.99,
-      "image": "https://via.placeholder.com/150"
+      "image": "images/pexels-sameerkalani-3802602.jpg"
     },
     {
       "id": 2,
       "name": "Product 2",
       "description": "Description of Product 2",
       "price": 29.99,
-      "image": "https://via.placeholder.com/150"
+      "image": "images/pexels-pixabay-279906.jpg"
     },
     {
       "id": 3,
       "name": "Product 3",
       "description": "Description of Product 3",
       "price": 39.99,
-      "image": "https://via.placeholder.com/150"
+      "image": "images/pexels-madebymath-90946.jpg"
     }
   ]
   
