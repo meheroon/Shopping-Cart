@@ -43,9 +43,11 @@ function addToCart(productId) {
 function updateCart() {
   const cartItemsContainer = document.getElementById('cart-items');
   const totalPriceElement = document.getElementById('total-price');
+  const cartCountElement = document.getElementById('cart-count');
   
   cartItemsContainer.innerHTML = '';
   let totalPrice = 0;
+  let cartCount = 0;
 
   cart.forEach(item => {
     const cartItem = document.createElement('div');
@@ -55,19 +57,34 @@ function updateCart() {
       <span>${item.product.name} (x${item.quantity})</span>
       <span>$${(item.product.price * item.quantity).toFixed(2)}</span>
       <button onclick="removeFromCart(${item.product.id})">Remove</button>
+      <button onclick="updateQuantity(${item.product.id}, 1)">+</button>
+      <button onclick="updateQuantity(${item.product.id}, -1)">-</button>
     `;
     
     cartItemsContainer.appendChild(cartItem);
     totalPrice += item.product.price * item.quantity;
+    cartCount += item.quantity;
   });
 
   totalPriceElement.innerText = `Total: $${totalPrice.toFixed(2)}`;
+  cartCountElement.innerText = `Items in Cart: ${cartCount}`;
 }
 
 function removeFromCart(productId) {
   const cartIndex = cart.findIndex(item => item.product.id === productId);
   if (cartIndex > -1) {
     cart.splice(cartIndex, 1);
+    updateCart();
+  }
+}
+
+function updateQuantity(productId, delta) {
+  const cartItem = cart.find(item => item.product.id === productId);
+  if (cartItem) {
+    cartItem.quantity += delta;
+    if (cartItem.quantity <= 0) {
+      cartItem.quantity = 1; // Prevent negative quantities
+    }
     updateCart();
   }
 }
@@ -80,6 +97,7 @@ document.getElementById('clear-cart').addEventListener('click', () => {
 document.getElementById('checkout').addEventListener('click', () => {
   if (cart.length > 0) {
     alert('Proceeding to checkout...');
+    // You can redirect to a checkout page or show a modal with summary
   } else {
     alert('Cart is empty');
   }
